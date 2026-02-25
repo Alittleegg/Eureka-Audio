@@ -1,9 +1,33 @@
+---
+license: apache-2.0
+language:
+  - en
+  - zh
+tags:
+  - audio
+  - speech
+  - multimodal
+  - audio-language-model
+  - asr
+  - speech-recognition
+library_name: transformers
+pipeline_tag: audio-text-to-text
+base_model:
+  - Qwen/Qwen3-1.7B-Base
+  - openai/whisper-large-v3
+---
+
 <p align="center">
     <img src="assets/eureka_logo_new.png" width="200"/>
 <p>
 
-<p align="center">
-Eureka-Audio-Instruct <a href="https://huggingface.co/cslys1999/Eureka-Audio-Instruct">🤗</a>&nbsp; | 📑 <a href="https://arxiv.org/abs/2602.13954">Paper</a>
+<p align="left">
+  Eureka-Audio-Instruct 
+
+  <a href="https://huggingface.co/cslys1999/Eureka-Audio-Instruct">🤗HuggingFace</a>&nbsp; |
+  <a href="https://www.modelscope.cn/models/lys1999/Eureka-Audio-Instruct" target="_blank" style="margin: 2px;">
+    🤖️ ModelScope</a>&nbsp; |
+ 📑 <a href="https://arxiv.org/abs/2602.13954">Paper</a>
 </p>
 
 
@@ -72,63 +96,68 @@ pip install -r requirements.txt
 This example demonstrates basic usage for generating text from audio.
 
 ```python
+"""
+Eureka-Audio Local Inference Script
+
+Usage:
+    python infer_local.py --audio_path test_wav/0.wav --prompt "Descript The audio."
+"""
+
+import os
+import sys
+import argparse
+
 from eureka_infer.api import EurekaAudio
 
-# --- 1. Load Model ---
-model_path = "cslys1999/Eureka-Audio-Instruct"
-model = EurekaAudio(model_path=model_path)
 
-# --- 2. Example 1: Audio-to-Text (ASR) ---
-messages = [
-      {
-          "role": "system",
-          "content": [
-            {
-              "type": "text",
-              "text": "You are an advanced ASR (Automatic Speech Recognition) AI assistant."
-          }
-        ]
-    },
-    {
-        "role": "user",
-        "content": [
-            {
-              "type": "audio_url", 
-              "audio_url": {"url": "test_audios/asr_example.wav"}
-            }
-        ]
-    }
-]
+def main():
+    parser = argparse.ArgumentParser(description="Eureka-Audio Local Inference")
+    parser.add_argument("--model_path", type=str, default="Eureka-Audio-Instruct",
+                        help="Path to the model checkpoint")
+    parser.add_argument("--audio_path", type=str, required=True,
+                        help="Path to the audio file")
+    parser.add_argument("--prompt", type=str, default="Descript The audio.",
+                        help="User prompt")
+    parser.add_argument("--max_new_tokens", type=int, default=512,
+                        help="Maximum number of new tokens to generate")
+    parser.add_argument("--device", type=str, default="cuda:0",
+                        help="Device to use (cuda:0/cpu)")
+    args = parser.parse_args()
 
-# Generate text output
-response = model.generate(
-    messages, 
-    temperature=0.0, 
-    top_p=0.0, 
-    top_k=0.0,
-    do_sample=False
-  )
-print(">>> ASR Output: ", response)
+    print(f"Loading model from {args.model_path}...")
+    model = EurekaAudio(model_path=args.model_path, device=args.device)
 
-# --- 3. Example 2: Audio Question Answering ---
-messages = [
-    {
-        "role": "user",
-        "content": [
-            {"type": "audio_url", "audio_url": {"url": "test_audios/qa_example.wav"}},
-            {"type": "text", "text": "Based on the given audio, identify the source of the crowing.\nA. Rooster\nB. Dog\nC. Cat\nD. Cow"}
-        ]
-    }
-]
+    # Build messages
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "audio_url", "audio_url": {"url": args.audio_path}},
+                {"type": "text", "text": args.prompt}
+            ]
+        }
+    ]
 
-response = model.generate(
-    messages, 
-    temperature=0.0, 
-    top_p=0.0, 
-    top_k=0.0,
-    do_sample=False
-  )
-print(">>> Audio QA Output: ", response)
+    print(f"Processing audio: {args.audio_path}")
+    print(f"Prompt: {args.prompt}")
+    print("Generating response...")
+
+    response = model.generate(
+        messages,
+        max_new_tokens=args.max_new_tokens,
+        temperature=0.0,
+        top_p=0.0,
+        top_k=0,
+        do_sample=False,
+    )
+
+    print("\n" + "="*50)
+    print(f"Response:\n{response}")
+    print("="*50)
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 ### Using HuggingFace Transformers
@@ -721,7 +750,17 @@ If you find Eureka-Audio useful in your research or applications, please cite ou
       url={https://arxiv.org/abs/2602.13954}, 
 }
 ```
-
+```bibtex
+@misc{lei2026moeadapterlargeaudio,
+      title={MoE Adapter for Large Audio Language Models: Sparsity, Disentanglement, and Gradient-Conflict-Free}, 
+      author={Yishu Lei and Shuwei He and Jing Hu and Dan Zhang and Xianlong Luo and Danxiang Zhu and Shikun Feng and Rui Liu and Jingzhou He and Yu Sun and Hua Wu and Haifeng Wang},
+      year={2026},
+      eprint={2601.02967},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2601.02967}, 
+}
+```
 
 ## Contact Us
 
