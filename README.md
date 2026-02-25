@@ -2,15 +2,23 @@
     <img src="assets/eureka_logo_new.png" width="200"/>
 <p>
 
-<p align="left">
-  Eureka-Audio-Instruct 
-
-  <a href="https://huggingface.co/cslys1999/Eureka-Audio-Instruct">🤗HuggingFace</a>&nbsp; |
-  <a href="https://www.modelscope.cn/models/lys1999/Eureka-Audio-Instruct" target="_blank" style="margin: 2px;">
-    🤖️ ModelScope</a>&nbsp; |
- 📑 <a href="https://arxiv.org/abs/2602.13954">Paper</a>
+<p align="center">
+  <b>Eureka-Audio-Instruct</b>
 </p>
 
+<p align="center">
+  <a href="https://huggingface.co/cslys1999/Eureka-Audio-Instruct">
+    <img src="https://img.shields.io/badge/🤗%20HuggingFace-Model-yellow" alt="HuggingFace"/>
+  </a>
+  &nbsp;
+  <a href="https://www.modelscope.cn/models/lys1999/Eureka-Audio-Instruct">
+    <img src="https://img.shields.io/badge/🤖%20ModelScope-Model-blue" alt="ModelScope"/>
+  </a>
+  &nbsp;
+  <a href="https://arxiv.org/abs/2602.13954">
+    <img src="https://img.shields.io/badge/📑%20arXiv-Paper-red" alt="Paper"/>
+  </a>
+</p>
 
 We present **Eureka-Audio**, a compact yet high-performance audio language model that achieves competitive performance against models that are **4 to 18 times larger** across a broad range of audio understanding benchmarks. Despite containing only **1.7B parameters**, Eureka-Audio demonstrates strong performance on automatic speech recognition (ASR), audio understanding, and dense audio captioning, matching or surpassing multiple 7B to 30B audio and omni-modal baselines.
 
