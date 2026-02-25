@@ -1,22 +1,3 @@
----
-license: apache-2.0
-language:
-  - en
-  - zh
-tags:
-  - audio
-  - speech
-  - multimodal
-  - audio-language-model
-  - asr
-  - speech-recognition
-library_name: transformers
-pipeline_tag: audio-text-to-text
-base_model:
-  - Qwen/Qwen3-1.7B-Base
-  - openai/whisper-large-v3
----
-
 <p align="center">
     <img src="assets/eureka_logo_new.png" width="200"/>
 <p>
