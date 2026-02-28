@@ -2,10 +2,45 @@
 Eureka-Audio Inference Script
 
 This script demonstrates how to use Eureka-Audio for various audio understanding tasks.
+
+Usage:
+    # 激活环境
+    source env/eureka_audio_env/bin/activate
+
+    # ASR 任务 (语音识别) - 使用专门的 ASR system prompt
+    python Eureka-Audio-main/infer.py --audio_path test_wav/0.wav --task asr
+
+    # QA 任务 (音频问答) - 无 system prompt，需要提供问题
+    python Eureka-Audio-main/infer.py --audio_path test_wav/0.wav --task qa --question "这段音频说了什么？"
+
+    # Caption 任务 (音频描述) - 无 system prompt，生成音频的详细描述
+    python Eureka-Audio-main/infer.py --audio_path test_wav/0.wav --task caption
+
+Arguments:
+    --model_path      模型路径 (默认: Eureka-Audio-Instruct/)
+    --audio_path      音频文件路径 (默认: test_audios/asr_example.wav)
+    --task            任务类型: asr, qa, caption (默认: asr)
+    --question        用户问题，仅用于 qa 任务
+    --temperature     采样温度 (默认: 0.0, greedy decoding)
+    --top_p           Top-p 采样参数 (默认: 0.0)
+    --top_k           Top-k 采样参数 (默认: 0)
+    --do_sample       是否使用采样 (默认: False)
+    --max_new_tokens  最大生成 token 数 (默认: 512)
+
+Notes:
+    - 不同任务使用不同的 system prompt，这很重要:
+      * ASR: 有 system prompt "You are an advanced ASR..."
+      * QA/Caption: 无 system prompt
+    - chat template 由 Qwen3OmniMoeProcessor 自动处理，不要手动构建
+    - 音频帧数按 wav.shape[-1] / 1280 计算，每 1280 采样点 = 1 frame (80ms)
 """
 
 import argparse
 import os
+import sys
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from eureka_infer.api import EurekaAudio
 
@@ -15,7 +50,7 @@ def main():
     parser.add_argument(
         "--model_path",
         type=str,
-        default="Eureka/Eureka-Audio-1.7B-Instruct",
+        default="../Eureka-Audio-Instruct/",
         help="Path to the model (HuggingFace model ID or local path)",
     )
     parser.add_argument(
@@ -75,7 +110,7 @@ def main():
 
     # Prepare messages based on task
     if args.task == "asr":
-        # Automatic Speech Recognition
+        # Automatic Speech Recognition - 使用专门的 ASR system prompt
         messages = [
             {
                 "role": "system",
@@ -97,7 +132,7 @@ def main():
         print(f">>> Audio: {args.audio_path}")
 
     elif args.task == "qa":
-        # Audio Question Answering
+        # Audio Question Answering - 无 system prompt
         question = args.question or "Based on the given audio, identify the source of the crowing.\nA. Rooster\nB. Dog\nC. Cat\nD. Cow"
         messages = [
             {
@@ -113,7 +148,7 @@ def main():
         print(f">>> Question: {question}")
 
     elif args.task == "caption":
-        # Audio Captioning
+        # Audio Captioning - 无 system prompt
         messages = [
             {
                 "role": "user",

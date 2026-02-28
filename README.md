@@ -80,75 +80,6 @@ cd Eureka-Audio
 pip install -r requirements.txt
 ```
 
-## Quick Start
-
-This example demonstrates basic usage for generating text from audio.
-
-```python
-"""
-Eureka-Audio Local Inference Script
-
-Usage:
-    python infer_local.py --audio_path test_wav/0.wav --prompt "Descript The audio."
-"""
-
-import os
-import sys
-import argparse
-
-from eureka_infer.api import EurekaAudio
-
-
-def main():
-    parser = argparse.ArgumentParser(description="Eureka-Audio Local Inference")
-    parser.add_argument("--model_path", type=str, default="Eureka-Audio-Instruct",
-                        help="Path to the model checkpoint")
-    parser.add_argument("--audio_path", type=str, required=True,
-                        help="Path to the audio file")
-    parser.add_argument("--prompt", type=str, default="Descript The audio.",
-                        help="User prompt")
-    parser.add_argument("--max_new_tokens", type=int, default=512,
-                        help="Maximum number of new tokens to generate")
-    parser.add_argument("--device", type=str, default="cuda:0",
-                        help="Device to use (cuda:0/cpu)")
-    args = parser.parse_args()
-
-    print(f"Loading model from {args.model_path}...")
-    model = EurekaAudio(model_path=args.model_path, device=args.device)
-
-    # Build messages
-    messages = [
-        {
-            "role": "user",
-            "content": [
-                {"type": "audio_url", "audio_url": {"url": args.audio_path}},
-                {"type": "text", "text": args.prompt}
-            ]
-        }
-    ]
-
-    print(f"Processing audio: {args.audio_path}")
-    print(f"Prompt: {args.prompt}")
-    print("Generating response...")
-
-    response = model.generate(
-        messages,
-        max_new_tokens=args.max_new_tokens,
-        temperature=0.0,
-        top_p=0.0,
-        top_k=0,
-        do_sample=False,
-    )
-
-    print("\n" + "="*50)
-    print(f"Response:\n{response}")
-    print("="*50)
-
-
-if __name__ == "__main__":
-    main()
-```
-
 ### Using HuggingFace Transformers
 
 ```python
@@ -164,6 +95,20 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 ```
 
+## Quick Start
+
+This example demonstrates basic usage for generating text from audio.
+
+```
+# ASR
+python Eureka-Audio-main/infer.py --model_path Eureka-Audio-Instruct/ --audio_path test_wav/0.wav --task asr
+
+# QA
+python Eureka-Audio-main/infer.py --model_path Eureka-Audio-Instruct/ --audio_path test_wav/0.wav --task qa --question "Descript the audio."
+
+# Caption
+python Eureka-Audio-main/infer.py --model_path Eureka-Audio-Instruct/ --audio_path test_wav/0.wav --task caption
+```
 
 ## Evaluation
 
