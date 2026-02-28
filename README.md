@@ -101,13 +101,13 @@ This example demonstrates basic usage for generating text from audio.
 
 ```
 # ASR
-python Eureka-Audio-main/infer.py --model_path Eureka-Audio-Instruct/ --audio_path test_wav/0.wav --task asr
+python infer.py --model_path ${your_model_path} --audio_path ${your_audio_path} --task asr
 
 # QA
-python Eureka-Audio-main/infer.py --model_path Eureka-Audio-Instruct/ --audio_path test_wav/0.wav --task qa --question "Descript the audio."
+python infer.py --model_path ${your_model_path} --audio_path ${your_audio_path} --task qa --question "Descript the audio."
 
 # Caption
-python Eureka-Audio-main/infer.py --model_path Eureka-Audio-Instruct/ --audio_path test_wav/0.wav --task caption
+python infer.py --model_path ${your_model_path} --audio_path ${your_audio_path} --task caption
 ```
 
 ## Evaluation
