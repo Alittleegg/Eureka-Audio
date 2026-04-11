@@ -25,7 +25,7 @@ We present **Eureka-Audio**, a compact yet high-performance audio language model
 
 ## News
 
-* Apr 11, 2026: Our paper "MoE Adapter for Large Audio Language Models: Sparsity, Disentanglement, and Gradient-Conflict-Free" has been accepted by ACL-2026 Findings!
+* 🎉 **Apr 11, 2026: Our paper "MoE Adapter for Large Audio Language Models: Sparsity, Disentanglement, and Gradient-Conflict-Free" has been accepted by ACL-2026 Findings!**
 * Feb 25, 2026: We release the inference code and model weights of [Eureka-Audio-Instruct](https://huggingface.co/cslys1999/Eureka-Audio-Instruct).
 * Feb 17, 2026: We release the technical report of [Eureka-Audio](https://arxiv.org/abs/2602.13954).
 
